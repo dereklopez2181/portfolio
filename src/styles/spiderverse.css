@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
+:root {
+  --magenta: #FF0099;
+  --cyan: #00D4FF;
+  --yellow: #FFE500;
+  --near-black: #141425;
+  --ink: #0D0D1A;
+  --paper: #F5F0E8;
+  --gutter: 8px;
+  --border: 4px solid var(--ink);
+  --border-thick: 6px solid var(--ink);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--near-black);
+}
+
+body {
+  font-family: 'Comic Neue', cursive, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ===== MISREGISTRATION EFFECT ===== */
+.misregister {
+  text-shadow:
+    2px 1px 0 var(--cyan),
+    -2px -1px 0 var(--magenta),
+    1px -1px 0 var(--yellow);
+}
+
+.misregister-heavy {
+  text-shadow:
+    4px 2px 0 var(--cyan),
+    -4px -2px 0 var(--magenta),
+    2px -2px 0 var(--yellow);
+}
+
+/* ===== COMIC PANEL SYSTEM ===== */
+.panel {
+  border: var(--border-thick);
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.panel-grid {
+  display: grid;
+  gap: var(--gutter);
+  padding: var(--gutter);
+  background: var(--ink);
+}
+
+/* ===== CAPTION BOX ===== */
+.caption-box {
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.5;
+  position: relative;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* ===== INK SPLATTER BURST ===== */
+@keyframes ink-burst {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* ===== IMPACT FRAME ENTRANCE ===== */
+@keyframes impact-in {
+  0% { transform: scale(0.3) rotate(-5deg); opacity: 0; filter: blur(4px); }
+  60% { transform: scale(1.05) rotate(1deg); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes slide-up-impact {
+  0% { transform: translateY(80px) scale(0.9); opacity: 0; }
+  70% { transform: translateY(-8px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes glitch-in {
+  0% { transform: translateX(-30px); opacity: 0; clip-path: inset(0 100% 0 0); }
+  30% { clip-path: inset(0 30% 0 0); }
+  50% { transform: translateX(5px); clip-path: inset(0 0 0 0); }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.anim-target {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.anim-impact { animation: impact-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.anim-slide-up { animation: slide-up-impact 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.anim-glitch { animation: glitch-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--magenta); border: 2px solid var(--ink); }
