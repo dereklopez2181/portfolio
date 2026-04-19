@@ -62,7 +62,7 @@ export default function ContactSection({ email }: { email: string }) {
           }}
         >
           <p style={{ fontSize: '1.1rem', fontWeight: 700, lineHeight: 1.6, color: 'var(--ink)' }}>
-            Got a project that needs some super-powered design? Let&apos;s make something amazing together.
+            Interested? Let&apos;s make something amazing together.
           </p>
           <div style={{
             position: 'absolute', bottom: '-22px', left: '50%', marginLeft: '-14px',

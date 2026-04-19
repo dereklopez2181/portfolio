@@ -4,27 +4,25 @@ import AboutSection from './AboutSection';
 import ContactSection, { Footer } from './ContactSection';
 
 const PROJECTS = [
-  { title: 'NEXUS APP', type: 'UI/UX', description: 'A next-gen social platform with real-time collaboration.', tags: ['React', 'Figma', 'Motion'], sfx: 'BAM!' },
-  { title: 'VORTEX BRAND', type: 'BRANDING', description: 'Full visual identity for an esports organization.', tags: ['Identity', 'Print', 'Digital'], sfx: 'KAPOW!' },
-  { title: 'ECHO DASHBOARD', type: 'WEB APP', description: 'Analytics dashboard with data visualization and dark mode.', tags: ['D3.js', 'Vue', 'API'], sfx: 'WHAM!' },
-  { title: 'PULSE LANDING', type: 'WEB DESIGN', description: 'High-converting landing page for a fitness startup.', tags: ['HTML/CSS', 'Animation', 'CRO'], sfx: 'THWIP!' },
-  { title: 'DRIFT MOBILE', type: 'MOBILE', description: 'iOS music discovery app with gesture-based navigation.', tags: ['Swift', 'Figma', 'Prototyping'], sfx: 'CRACK!' },
-  { title: 'FORGE SYSTEM', type: 'DESIGN SYSTEM', description: 'Component library and token system for enterprise SaaS.', tags: ['Tokens', 'React', 'Storybook'], sfx: 'POW!' },
+  { title: 'GROCERY SHOPPER', type: 'Automation', description: 'Chrome Manifest V3 extension that automates HEB.com grocery cart population from a plain-text list.', tags: ['React', 'Node.js', 'AI Pipeline', 'Claude Vision API'], sfx: 'BAM!' },
+  { title: 'BETSHARE.APP', type: 'WEB APP', description: 'Full-stack mobile-first sports betting tracker featuring authentication, bet logging, group leaderboards, and performance dashboards.', tags: ['Next.js / React', 'Supabase', 'Claude Vision', 'Sentry'], sfx: 'KAPOW!' },
+  { title: 'CHECKOUT-JS-DEPLOYER', type: 'DEV TOOL', description: 'CLI tool (published as a globally-linked npm package) that automates running multiple BigCommerce checkout-js versions side-by-side for regression testing.', tags: ['Cloudflare', 'Node.js', 'BigCommerce API'], sfx: 'WHAM!' },
+  { title: 'SEO CONTENT STRATEGY GENERATOR', type: 'DELIVERABLE', description: 'Repeatable workflow that crawls a client website, researches competitor keywords and People Also Ask data, and generates a structured SEO content strategy document.', tags: ['Firecrawl', 'SerpAPI', 'Agentic Workflow'], sfx: 'THONK!' }
 ];
 
-const SKILLS = ['React', 'Figma', 'TypeScript', 'Motion Design', 'UI/UX', 'Branding', 'Illustration', 'CSS Wizardry'];
+const SKILLS = ['React', 'Agentic Workflow', 'TypeScript', 'AI-Driven Development', 'Ecommerce Strategy'];
 
 export default function SpiderVerseApp() {
   return (
     <>
       <HeroSection
         name="DEREK LOPEZ"
-        title="CREATIVE DEVELOPER"
-        tagline="I build digital experiences that hit different — where code meets creativity and pixels tell stories."
+        title="Technology Consultant"
+        tagline="Advisor. Builder."
       />
       <WorkSection projects={PROJECTS} />
       <AboutSection
-        bio="I'm a creative developer who lives at the intersection of design and engineering. I believe the best digital experiences feel alive — they respond, they surprise, they make you lean in. Every project is a chance to push the boundaries of what the web can do."
+        bio="I'm a creative advisor who lives at the intersection of architecture and engineering. I believe the best digital solutions feel alive — they respond, they surprise, they make you lean in. Every project is a chance to push the boundaries of what I can do."
         skills={SKILLS}
       />
       <ContactSection email="hello@dereklopez.dev" />
