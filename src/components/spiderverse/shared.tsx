@@ -55,7 +55,7 @@ export function SfxText({
       fontFamily: "'Bangers', cursive",
       fontSize: '2rem',
       color: 'var(--ink)',
-      WebkitTextStroke: '2px var(--ink)',
+      WebkitTextStroke: '3px white',
       paintOrder: 'stroke fill' as CSSProperties['paintOrder'],
       background: color,
       padding: '4px 16px',
