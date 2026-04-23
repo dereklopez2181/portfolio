@@ -1,43 +1,89 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { RefObject } from 'react';
-import { useReveal, ActionLines, SfxText } from './shared';
-
-interface Project {
-  title: string;
-  type: string;
-  description: string;
-  tags: string[];
-  sfx: string;
-}
+import { ActionLines, SfxText } from './shared';
+import type { Project } from './SpiderVerseApp';
 
 const ACCENT_COLORS = ['var(--magenta)', 'var(--cyan)', 'var(--yellow)', 'var(--magenta)'];
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const [ref, visible] = useReveal(0.1);
+function useCardReveal(threshold = 0.1): [RefObject<HTMLDivElement | null>, boolean] {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.unobserve(el); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, visible];
+}
+
+function ProjectCard({
+  project,
+  index,
+  isActive,
+  onSelect,
+}: {
+  project: Project;
+  index: number;
+  isActive: boolean;
+  onSelect: (id: string, cardRef: RefObject<HTMLDivElement>) => void;
+}) {
+  const [cardRef, visible] = useCardReveal(0.1);
   const [hovered, setHovered] = useState(false);
   const accentColor = ACCENT_COLORS[index % ACCENT_COLORS.length];
 
+  const handleActivate = () => onSelect(project.id, cardRef);
+
   return (
     <div
-      ref={ref as RefObject<HTMLDivElement>}
+      ref={cardRef}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isActive}
       className={visible ? 'anim-slide-up' : 'anim-target'}
+      onClick={handleActivate}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); } }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        border: '5px solid var(--ink)',
+        border: isActive ? `5px solid var(--cyan)` : '5px solid var(--ink)',
         background: 'var(--paper)',
         position: 'relative',
         overflow: 'hidden',
         cursor: 'pointer',
         transform: hovered ? 'scale(1.05) rotate(-1deg)' : 'scale(1) rotate(0deg)',
-        transition: 'transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.25s ease',
-        boxShadow: hovered
-          ? `8px 8px 0 var(--ink), 12px 12px 0 ${accentColor}`
-          : '4px 4px 0 var(--ink)',
+        transition: 'transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.25s ease, border-color 0.2s ease',
+        boxShadow: isActive
+          ? `8px 8px 0 var(--ink), 12px 12px 0 var(--cyan)`
+          : hovered
+            ? `8px 8px 0 var(--ink), 12px 12px 0 ${accentColor}`
+            : '4px 4px 0 var(--ink)',
         animationDelay: `${index * 0.12}s`,
         zIndex: hovered ? 10 : 1,
+        outline: 'none',
       }}
     >
+      {/* Active indicator */}
+      {isActive && (
+        <div style={{
+          position: 'absolute', top: '8px', left: '8px', zIndex: 10,
+          background: 'var(--cyan)',
+          border: '2px solid var(--ink)',
+          padding: '2px 8px',
+          fontFamily: "'Bangers', cursive",
+          fontSize: '0.75rem',
+          letterSpacing: '0.05em',
+          color: 'var(--ink)',
+          boxShadow: '2px 2px 0 var(--ink)',
+        }}>
+          ▶ OPEN
+        </div>
+      )}
+
       {/* Halftone hover overlay */}
       <div style={{
         position: 'absolute', inset: 0,
@@ -76,11 +122,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         }}>
           {`[ ${project.type} ]`}
         </span>
-        {hovered ? (
+        {hovered && (
           <div style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 5, animation: 'impact-in 0.3s both' }}>
             <SfxText text={project.sfx} color={accentColor} rotation={-8} style={{ fontSize: '1.2rem' }} />
           </div>
-        ) : null}
+        )}
       </div>
 
       {/* Text */}
@@ -116,38 +162,79 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </span>
           ))}
         </div>
+        <div style={{
+          marginTop: '12px',
+          fontFamily: "'Bangers', cursive",
+          fontSize: '0.85rem',
+          letterSpacing: '0.06em',
+          color: accentColor,
+          WebkitTextStroke: '1px var(--ink)',
+        }}>
+          CLICK FOR DETAILS →
+        </div>
       </div>
     </div>
   );
 }
 
-export default function WorkSection({ projects }: { projects: Project[] }) {
-  const [ref, visible] = useReveal(0.05);
+export default function WorkSection({
+  projects,
+  selectedId,
+  onSelect,
+  sectionRef,
+}: {
+  projects: Project[];
+  selectedId: string | null;
+  onSelect: (id: string, cardRef: RefObject<HTMLDivElement>) => void;
+  sectionRef?: RefObject<HTMLElement | null>;
+}) {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerVisible, setHeaderVisible] = useState(false);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setHeaderVisible(true); obs.unobserve(el); } },
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section ref={ref as RefObject<HTMLElement>} style={{ background: 'var(--ink)', padding: 'var(--gutter)' }}>
+    <section
+      ref={sectionRef as RefObject<HTMLElement>}
+      style={{ background: 'var(--ink)', padding: 'var(--gutter)' }}
+    >
       {/* Header */}
-      <div style={{
-        background: 'var(--paper)',
-        border: 'var(--border-thick)',
-        padding: '28px 32px',
-        marginBottom: 'var(--gutter)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
+      <div
+        ref={headerRef}
+        style={{
+          background: 'var(--paper)',
+          border: 'var(--border-thick)',
+          padding: '28px 32px',
+          marginBottom: 'var(--gutter)',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
         <div style={{
           position: 'absolute', inset: 0,
           background: 'radial-gradient(circle, rgba(255,0,153,0.08) 1px, transparent 1px)',
           backgroundSize: '6px 6px', pointerEvents: 'none',
         }} />
-        <h2 className={visible ? 'anim-glitch' : 'anim-target'} style={{
-          fontFamily: "'Bangers', cursive",
-          fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-          color: 'var(--ink)',
-          textShadow: '3px 2px 0 var(--cyan), -3px -2px 0 var(--magenta)',
-          letterSpacing: '0.06em',
-          position: 'relative', zIndex: 2,
-        }}>
+        <h2
+          className={headerVisible ? 'anim-glitch' : 'anim-target'}
+          style={{
+            fontFamily: "'Bangers', cursive",
+            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            color: 'var(--ink)',
+            textShadow: '3px 2px 0 var(--cyan), -3px -2px 0 var(--magenta)',
+            letterSpacing: '0.06em',
+            position: 'relative', zIndex: 2,
+          }}
+        >
           ★ MY WORK ★
         </h2>
       </div>
@@ -158,7 +245,15 @@ export default function WorkSection({ projects }: { projects: Project[] }) {
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: 'var(--gutter)',
       }}>
-        {projects.map((p, i) => <ProjectCard key={p.title} project={p} index={i} />)}
+        {projects.map((p, i) => (
+          <ProjectCard
+            key={p.id}
+            project={p}
+            index={i}
+            isActive={p.id === selectedId}
+            onSelect={onSelect}
+          />
+        ))}
       </div>
     </section>
   );
