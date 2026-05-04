@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dereklopez.dev/sitemap-index.xml
