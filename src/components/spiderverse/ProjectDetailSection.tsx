@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
-import { ActionLines, SfxText } from './shared';
+import { ActionLines } from './shared';
 import type { Project } from './SpiderVerseApp';
 
 const ACCENT_COLORS: Record<string, string> = {
@@ -10,6 +10,7 @@ const ACCENT_COLORS: Record<string, string> = {
   'pulse-landing': 'var(--magenta)',
   'drift-mobile': 'var(--cyan)',
   'forge-system': 'var(--yellow)',
+  'betshare-app': 'var(--cyan)',
 };
 
 function getAccent(id: string): string {
@@ -45,9 +46,53 @@ export default function ProjectDetailSection({
   return (
     <section
       ref={sectionRef}
-      style={{ background: 'var(--ink)', padding: 'var(--gutter)' }}
+      style={{ background: 'var(--ink)', padding: 'var(--gutter)', position: 'relative' }}
       aria-label={`Project details: ${project.title}`}
     >
+      {/* Floating "back to top" button — hovers over the content */}
+      <button
+        ref={closeButtonRef}
+        onClick={onClose}
+        aria-label="Back to top"
+        title="Back to top"
+        className="back-to-top"
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          background: 'var(--ink)',
+          color: 'var(--paper)',
+          border: `4px solid ${accent}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: `0 4px 0 rgba(0,0,0,0.45), 0 0 0 3px var(--ink), 0 8px 22px ${accent}55`,
+          zIndex: 50,
+          transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-3px) scale(1.06)';
+          (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 7px 0 rgba(0,0,0,0.5), 0 0 0 3px var(--ink), 0 12px 28px ${accent}77`;
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0) scale(1)';
+          (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 0 rgba(0,0,0,0.45), 0 0 0 3px var(--ink), 0 8px 22px ${accent}55`;
+        }}
+        onMouseDown={e => {
+          (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(1px) scale(0.97)';
+        }}
+        onMouseUp={e => {
+          (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-3px) scale(1.06)';
+        }}
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <polyline points="6 14 12 8 18 14" />
+        </svg>
+      </button>
       {/* Key on project.id causes React to remount content and replay CSS animations */}
       <div key={project.id}>
 
@@ -79,37 +124,7 @@ export default function ProjectDetailSection({
             >
               ★ PROJECT FILE: {project.title} ★
             </h2>
-            <SfxText text={project.sfx} color="var(--paper)" rotation={-6} style={{ fontSize: '1.1rem' }} />
           </div>
-          <button
-            ref={closeButtonRef}
-            onClick={onClose}
-            aria-label="Close project detail"
-            style={{
-              fontFamily: "'Bangers', cursive",
-              fontSize: '1.1rem',
-              letterSpacing: '0.06em',
-              background: 'var(--ink)',
-              color: 'var(--paper)',
-              border: '3px solid var(--paper)',
-              padding: '8px 18px',
-              cursor: 'pointer',
-              boxShadow: '3px 3px 0 rgba(0,0,0,0.4)',
-              position: 'relative',
-              zIndex: 2,
-              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.05)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '5px 5px 0 rgba(0,0,0,0.5)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '3px 3px 0 rgba(0,0,0,0.4)';
-            }}
-          >
-            ✕ CLOSE
-          </button>
         </div>
 
         {/* Two-panel content grid */}
@@ -141,18 +156,39 @@ export default function ProjectDetailSection({
               pointerEvents: 'none', zIndex: 1,
             }} />
             {project.media ? (
-              <img
-                src={project.media.src}
-                alt={project.media.alt}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  position: 'absolute',
-                  inset: 0,
-                  zIndex: 2,
-                }}
-              />
+              project.media.type === 'video' ? (
+                <video
+                  src={project.media.src}
+                  aria-label={project.media.alt}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 2,
+                    background: 'var(--near-black)',
+                  }}
+                />
+              ) : (
+                <img
+                  src={project.media.src}
+                  alt={project.media.alt}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 2,
+                  }}
+                />
+              )
             ) : (
               <div style={{
                 position: 'relative',

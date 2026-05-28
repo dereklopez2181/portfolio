@@ -16,7 +16,7 @@ export interface Project {
   sfx: string;
   features: string[];
   techStack: string[];
-  media?: { src: string; alt: string };
+  media?: { src: string; alt: string; type?: 'image' | 'video' };
   links?: { label: string; url: string }[];
 }
 
@@ -45,6 +45,7 @@ const PROJECTS: Project[] = [
     longDescription: 'BetShare is a mobile-first web app for tracking sports bets and competing with friends. Users log picks, view personal dashboards with win-rate breakdowns, and climb group leaderboards in real time. Claude Vision parses bet slip photos so manual entry is optional.',
     tags: ['Next.js / React', 'Supabase', 'Claude Vision', 'Sentry'],
     sfx: 'KAPOW!',
+    media: { src: '/betshare_login_demo.mp4', alt: 'BetShare login flow demo', type: 'video' },
     features: [
       'Bet slip photo parsing via Claude Vision — no manual entry needed',
       'Real-time group leaderboards with Supabase subscriptions',
