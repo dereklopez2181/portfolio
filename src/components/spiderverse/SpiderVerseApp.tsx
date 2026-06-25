@@ -17,6 +17,7 @@ export interface Project {
   features: string[];
   techStack: string[];
   media?: { src: string; alt: string; type?: 'image' | 'video' };
+  cardImage?: { src: string; alt: string };
   links?: { label: string; url: string }[];
 }
 
@@ -29,6 +30,8 @@ const PROJECTS: Project[] = [
     longDescription: 'A Chrome extension that takes a plain-text grocery list and automatically populates an HEB.com cart — no manual searching required. Built on Manifest V3 with a Claude Vision API pipeline to match item names to store SKUs even when descriptions are ambiguous.',
     tags: ['React', 'Node.js', 'AI Pipeline', 'Claude Vision API'],
     sfx: 'BAM!',
+    media: { src: '/grocery-shopper-demo.mp4', alt: 'Grocery Shopper extension auto-filling an HEB.com cart from a plain-text list', type: 'video' },
+    cardImage: { src: '/grocery-shopper-still.png', alt: 'Grocery Shopper extension auto-filling an HEB.com cart from a plain-text list' },
     features: [
       'Paste any plain-text grocery list and auto-fill the HEB cart',
       'Claude Vision API resolves ambiguous item names to correct SKUs',
@@ -46,6 +49,7 @@ const PROJECTS: Project[] = [
     tags: ['Next.js / React', 'Supabase', 'Claude Vision', 'Sentry'],
     sfx: 'KAPOW!',
     media: { src: '/betshare_login_demo.mp4', alt: 'BetShare login flow demo', type: 'video' },
+    cardImage: { src: '/betshare-still.png', alt: 'BetShare group feed showing bet tracking and a live leaderboard' },
     features: [
       'Bet slip photo parsing via Claude Vision — no manual entry needed',
       'Real-time group leaderboards with Supabase subscriptions',

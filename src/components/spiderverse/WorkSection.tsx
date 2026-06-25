@@ -35,6 +35,8 @@ function ProjectCard({
   const [cardRef, visible] = useCardReveal(0.1);
   const [hovered, setHovered] = useState(false);
   const accentColor = ACCENT_COLORS[index % ACCENT_COLORS.length];
+  const cardImage = project.cardImage
+    ?? (project.media?.type === 'image' ? project.media : undefined);
 
   const handleActivate = () => onSelect(project.id, cardRef);
 
@@ -108,20 +110,49 @@ function ProjectCard({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
+        overflow: 'hidden',
         borderBottom: '4px solid var(--ink)',
       }}>
+        {cardImage ? (
+          <>
+            <img
+              src={cardImage.src}
+              alt={cardImage.alt}
+              loading="lazy"
+              style={{
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'top left',
+                zIndex: 1,
+                transform: hovered ? 'scale(1.06)' : 'scale(1)',
+                transition: 'transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)',
+              }}
+            />
+            {/* Comic color treatment */}
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+              background: `linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0) 55%)`,
+            }} />
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+              mixBlendMode: 'multiply',
+              background: `linear-gradient(135deg, ${accentColor}40, transparent 60%)`,
+            }} />
+          </>
+        ) : (
+          <span style={{
+            fontFamily: "'Bangers', cursive",
+            fontSize: '1.5rem',
+            color: 'var(--paper)',
+            letterSpacing: '0.08em',
+            zIndex: 2,
+            opacity: 0.5,
+            fontStyle: 'italic',
+          }}>
+            {`[ ${project.type} ]`}
+          </span>
+        )}
         <ActionLines intensity={hovered ? 'strong' : 'normal'} />
-        <span style={{
-          fontFamily: "'Bangers', cursive",
-          fontSize: '1.5rem',
-          color: 'var(--paper)',
-          letterSpacing: '0.08em',
-          zIndex: 2,
-          opacity: 0.5,
-          fontStyle: 'italic',
-        }}>
-          {`[ ${project.type} ]`}
-        </span>
         {hovered && (
           <div style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 5, animation: 'impact-in 0.3s both' }}>
             <SfxText text={project.sfx} color={accentColor} rotation={-8} style={{ fontSize: '1.2rem' }} />
