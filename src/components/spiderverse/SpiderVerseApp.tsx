@@ -19,7 +19,7 @@ export interface Project {
   techStack: string[];
   media?: { src: string; alt: string; type?: 'image' | 'video'; poster?: string; autoPlay?: boolean };
   walkthrough?: Walkthrough;
-  cardImage?: { src: string; alt: string };
+  cardImage?: { src: string; alt: string; objectPosition?: string };
   links?: { label: string; url: string }[];
 }
 
@@ -69,6 +69,11 @@ const PROJECTS: Project[] = [
     tags: ['Cloudflare', 'Node.js', 'BigCommerce API'],
     sfx: 'WHAM!',
     walkthrough: 'checkout',
+    cardImage: {
+      src: '/demos/checkout-js-deployer-thumbnail.jpg',
+      alt: 'Simulated terminal output showing two checkout releases running on ports 8080 and 8081',
+      objectPosition: 'center top',
+    },
     features: [
       'Single command to run N checkout-js versions in parallel',
       'Automatic port allocation and process management',
@@ -86,6 +91,11 @@ const PROJECTS: Project[] = [
     tags: ['Firecrawl', 'SerpAPI', 'Agentic Workflow'],
     sfx: 'THONK!',
     walkthrough: 'seo',
+    cardImage: {
+      src: '/demos/seo-content-strategy-thumbnail.jpg',
+      alt: 'Sample Lantern AV SEO strategy report showing existing site coverage and competitor research',
+      objectPosition: 'center top',
+    },
     features: [
       'Full site crawl via Firecrawl to map existing content coverage',
       'Competitor keyword gap analysis with SerpAPI',
