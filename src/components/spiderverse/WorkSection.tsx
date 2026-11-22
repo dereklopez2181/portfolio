@@ -30,7 +30,7 @@ function ProjectCard({
   project: Project;
   index: number;
   isActive: boolean;
-  onSelect: (id: string, cardRef: RefObject<HTMLDivElement>) => void;
+  onSelect: (id: string, cardRef: RefObject<HTMLDivElement | null>) => void;
 }) {
   const [cardRef, visible] = useCardReveal(0.1);
   const [hovered, setHovered] = useState(false);
@@ -201,7 +201,7 @@ function ProjectCard({
           color: accentColor,
           WebkitTextStroke: '1px var(--ink)',
         }}>
-          CLICK FOR DETAILS →
+          {project.walkthrough ? 'EXPLORE THE DEMO' : project.media?.type === 'video' ? 'WATCH THE DEMO' : 'VIEW PROJECT DETAILS'}
         </div>
       </div>
     </div>
@@ -216,7 +216,7 @@ export default function WorkSection({
 }: {
   projects: Project[];
   selectedId: string | null;
-  onSelect: (id: string, cardRef: RefObject<HTMLDivElement>) => void;
+  onSelect: (id: string, cardRef: RefObject<HTMLDivElement | null>) => void;
   sectionRef?: RefObject<HTMLElement | null>;
 }) {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -235,7 +235,7 @@ export default function WorkSection({
 
   return (
     <section
-      ref={sectionRef as RefObject<HTMLElement>}
+      ref={sectionRef}
       style={{ background: 'var(--ink)', padding: 'var(--gutter)' }}
     >
       {/* Header */}

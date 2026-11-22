@@ -4,6 +4,7 @@ import HeroSection from './HeroSection';
 import WorkSection from './WorkSection';
 import AboutSection from './AboutSection';
 import ProjectDetailSection from './ProjectDetailSection';
+import type { Walkthrough } from './ProjectWalkthrough';
 import ContactSection, { Footer } from './ContactSection';
 
 export interface Project {
@@ -16,7 +17,8 @@ export interface Project {
   sfx: string;
   features: string[];
   techStack: string[];
-  media?: { src: string; alt: string; type?: 'image' | 'video' };
+  media?: { src: string; alt: string; type?: 'image' | 'video'; poster?: string; autoPlay?: boolean };
+  walkthrough?: Walkthrough;
   cardImage?: { src: string; alt: string };
   links?: { label: string; url: string }[];
 }
@@ -30,7 +32,7 @@ const PROJECTS: Project[] = [
     longDescription: 'A Chrome extension that takes a plain-text grocery list and automatically populates an HEB.com cart — no manual searching required. Built on Manifest V3 with a Claude Vision API pipeline to match item names to store SKUs even when descriptions are ambiguous.',
     tags: ['React', 'Node.js', 'AI Pipeline', 'Claude Vision API'],
     sfx: 'BAM!',
-    media: { src: '/grocery-shopper-demo.mp4', alt: 'Grocery Shopper extension auto-filling an HEB.com cart from a plain-text list', type: 'video' },
+    media: { src: '/grocery-shopper-demo.mp4', alt: 'Grocery Shopper extension auto-filling an HEB.com cart from a plain-text list', type: 'video', autoPlay: true },
     cardImage: { src: '/grocery-shopper-still.png', alt: 'Grocery Shopper extension auto-filling an HEB.com cart from a plain-text list' },
     features: [
       'Paste any plain-text grocery list and auto-fill the HEB cart',
@@ -48,8 +50,8 @@ const PROJECTS: Project[] = [
     longDescription: 'BetShare is a mobile-first web app for tracking sports bets and competing with friends. Users log picks, view personal dashboards with win-rate breakdowns, and climb group leaderboards in real time. Claude Vision parses bet slip photos so manual entry is optional.',
     tags: ['Next.js / React', 'Supabase', 'Claude Vision', 'Sentry'],
     sfx: 'KAPOW!',
-    media: { src: '/betshare_login_demo.mp4', alt: 'BetShare login flow demo', type: 'video' },
-    cardImage: { src: '/betshare-still.png', alt: 'BetShare group feed showing bet tracking and a live leaderboard' },
+    media: { src: '/demos/betshare-groups.mp4', alt: 'BetShare group demo with a sortable leaderboard, shared picks, reactions, and member invites', type: 'video', poster: '/demos/betshare-groups.png' },
+    cardImage: { src: '/demos/betshare-groups.png', alt: 'BetShare Sunday Film Room group leaderboard' },
     features: [
       'Bet slip photo parsing via Claude Vision — no manual entry needed',
       'Real-time group leaderboards with Supabase subscriptions',
@@ -62,15 +64,16 @@ const PROJECTS: Project[] = [
     id: 'checkout-js-deployer',
     title: 'CHECKOUT-JS-DEPLOYER',
     type: 'DEV TOOL',
-    description: 'CLI tool (published as a globally-linked npm package) that automates running multiple BigCommerce checkout-js versions side-by-side for regression testing.',
+    description: 'CLI tool that runs multiple BigCommerce checkout-js versions side by side for regression testing.',
     longDescription: 'A globally-linked npm CLI that spins up multiple BigCommerce checkout-js builds in parallel, each on isolated ports, so you can regression-test across versions without manual setup. Cuts version-comparison setup from 20+ minutes to a single command.',
     tags: ['Cloudflare', 'Node.js', 'BigCommerce API'],
     sfx: 'WHAM!',
+    walkthrough: 'checkout',
     features: [
       'Single command to run N checkout-js versions in parallel',
       'Automatic port allocation and process management',
       'Cloudflare tunnel integration for shared testing URLs',
-      'Published as globally-linked npm package — works anywhere in terminal',
+      'Link globally with npm to run the CLI from any directory',
     ],
     techStack: ['Node.js', 'TypeScript', 'Cloudflare Tunnel', 'BigCommerce API', 'npm'],
   },
@@ -82,6 +85,7 @@ const PROJECTS: Project[] = [
     longDescription: 'An agentic workflow that takes a client URL, crawls the site with Firecrawl, pulls competitor keyword gaps and PAA data via SerpAPI, and outputs a structured SEO content strategy document — ready to hand to a content team. Turns a multi-day manual process into a 20-minute automated run.',
     tags: ['Firecrawl', 'SerpAPI', 'Agentic Workflow'],
     sfx: 'THONK!',
+    walkthrough: 'seo',
     features: [
       'Full site crawl via Firecrawl to map existing content coverage',
       'Competitor keyword gap analysis with SerpAPI',
@@ -118,7 +122,7 @@ export default function SpiderVerseApp() {
     return () => window.removeEventListener('hashchange', readHash);
   }, []);
 
-  const handleSelect = (id: string, cardRef: RefObject<HTMLDivElement>) => {
+  const handleSelect = (id: string, cardRef: RefObject<HTMLDivElement | null>) => {
     activeCardRef.current = cardRef.current;
     setSelectedProjectId(id);
     window.location.hash = `project/${id}`;

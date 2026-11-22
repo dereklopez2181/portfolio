@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 import { ActionLines } from './shared';
+import ProjectWalkthrough from './ProjectWalkthrough';
 import type { Project } from './SpiderVerseApp';
 
 const ACCENT_COLORS: Record<string, string> = {
@@ -24,7 +25,7 @@ export default function ProjectDetailSection({
 }: {
   project: Project | null;
   onClose: () => void;
-  sectionRef: RefObject<HTMLElement>;
+  sectionRef: RefObject<HTMLElement | null>;
 }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -130,7 +131,7 @@ export default function ProjectDetailSection({
         {/* Two-panel content grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
           gap: 'var(--gutter)',
         }}>
 
@@ -155,13 +156,17 @@ export default function ProjectDetailSection({
               backgroundSize: '8px 8px',
               pointerEvents: 'none', zIndex: 1,
             }} />
-            {project.media ? (
+            {project.walkthrough ? (
+              <ProjectWalkthrough kind={project.walkthrough} />
+            ) : project.media ? (
               project.media.type === 'video' ? (
                 <video
                   src={project.media.src}
                   aria-label={project.media.alt}
-                  autoPlay
-                  loop
+                  poster={project.media.poster}
+                  preload="metadata"
+                  autoPlay={project.media.autoPlay}
+                  loop={project.media.autoPlay}
                   muted
                   playsInline
                   controls
