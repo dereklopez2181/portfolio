@@ -13,7 +13,7 @@ export default function AboutSection({ bio, skills }: AboutProps) {
     <section ref={ref as RefObject<HTMLElement>} style={{ background: 'var(--ink)', padding: 'var(--gutter)' }}>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
         gap: 'var(--gutter)',
       }}>
         {/* Portrait panel */}
@@ -40,23 +40,23 @@ export default function AboutSection({ bio, skills }: AboutProps) {
             backgroundSize: '8px 8px', transform: 'rotate(30deg)',
             pointerEvents: 'none', zIndex: 1,
           }} />
-          <div style={{
-            width: '220px', height: '280px',
-            border: '5px solid var(--paper)',
-            background: `repeating-linear-gradient(
-              0deg, var(--near-black) 0px, var(--near-black) 4px, #222240 4px, #222240 8px
-            )`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            position: 'relative', zIndex: 3,
-            boxShadow: '8px 8px 0 rgba(0,0,0,0.5)',
-          }}>
-            <span style={{
-              fontFamily: 'monospace', color: 'var(--paper)',
-              fontSize: '0.8rem', opacity: 0.5, textAlign: 'center', padding: '20px',
-            }}>
-              [ your portrait here ]
-            </span>
-          </div>
+          <img
+            src="/brand_assets/derek-cartoon-portrait.jpg"
+            alt="Comic-style portrait of Derek Lopez in teal sunglasses beside a mountain creek"
+            width={768}
+            height={960}
+            loading="lazy"
+            decoding="async"
+            style={{
+              display: 'block',
+              width: 'min(280px, calc(100% - 40px))',
+              height: 'auto',
+              border: '5px solid var(--paper)',
+              position: 'relative',
+              zIndex: 3,
+              boxShadow: '8px 8px 0 rgba(0,0,0,0.5)',
+            }}
+          />
           <div style={{ position: 'absolute', top: '16px', left: '16px', zIndex: 5 }}>
             <SfxText text="WHO?!" color="var(--cyan)" rotation={-12} />
           </div>
