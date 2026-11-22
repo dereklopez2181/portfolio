@@ -1,0 +1,26 @@
+{
+  "profit": {
+    "tab": "leaderboard",
+    "title": "See how your group ranks by profit",
+    "seconds": 5,
+    "expectedContent": "+$102.40"
+  },
+  "roi": {
+    "tab": "leaderboard",
+    "title": "Sort by ROI to compare returns relative to stake",
+    "seconds": 5,
+    "expectedContent": "+50.0%"
+  },
+  "feed": {
+    "tab": "feed",
+    "title": "Review shared picks, results, and reactions",
+    "seconds": 6,
+    "expectedContent": "Dallas vs. Phoenix"
+  },
+  "members": {
+    "tab": "members",
+    "title": "Invite friends with a code or shareable link",
+    "seconds": 6,
+    "expectedContent": "FILMROOM"
+  }
+}
